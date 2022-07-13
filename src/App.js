@@ -1,23 +1,24 @@
-import logo from './logo.svg';
+
+import { useEffect } from 'react';
+import { fetchClues } from './store/gameSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import './App.css';
+import CluesList from './components/CluesList';
 
 function App() {
+
+  const dispatch = useDispatch()
+
+  const{status, error} = useSelector(state=> state.clues)
+
+  useEffect(()=>{
+    dispatch(fetchClues())
+  }, [dispatch])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {status === 'loading' && <h2>Loading...</h2>}
+      {error && <h2>An error occured: {error}</h2>}
+     <CluesList/>
     </div>
   );
 }
